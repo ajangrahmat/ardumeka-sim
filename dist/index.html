@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ArduMeka Simulator AVR Arduino</title>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+      }
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .glass-effect {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .code-editor {
+        min-height: 400px;
+      }
+      .led-glow {
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+        animation: pulse 2s infinite;
+      }
+      .led-glow.red {
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+      .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        animation: pulse 1.5s infinite;
+      }
+      .neo-button {
+        background: linear-gradient(145deg, #f3f4f6, #e5e7eb);
+        box-shadow: 8px 8px 16px #d1d5db, -8px -8px 16px #ffffff;
+        border: none;
+        transition: all 0.3s ease;
+      }
+      .neo-button:hover {
+        box-shadow: 4px 4px 8px #d1d5db, -4px -4px 8px #ffffff;
+        transform: translateY(1px);
+      }
+      .neo-button:active {
+        box-shadow: inset 4px 4px 8px #d1d5db, inset -4px -4px 8px #ffffff;
+      }
+      .neo-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index--Q9dr3g4.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-C6Qt9ME1.css">
+  </head>
+  <body class="min-h-screen gradient-bg">
+    <!-- Header -->
+    <header class="text-white py-6 px-4">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-3xl font-bold">ArduMeka Simulator</h1>
+              <p class="text-white text-opacity-80">AVR Arduino Development Environment</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div class="status-indicator"></div>
+            <span class="text-sm font-medium">Ready</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 pb-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- LED Panel -->
+        <div class="lg:col-span-1">
+          <div class="glass-effect rounded-xl p-6 h-fit">
+            <h3 class="text-white text-lg font-semibold mb-4 flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              Hardware Simulation
+            </h3>
+            <div class="space-y-4">
+              <div class="bg-gray-900 bg-opacity-50 rounded-lg p-4">
+                <h4 class="text-white text-sm font-medium mb-3">Digital Pins</h4>
+                <div class="flex justify-center space-x-6">
+                  <div class="text-center">
+                    <wokwi-led color="green" label="13" class="led-glow"></wokwi-led>
+                    <p class="text-white text-xs mt-2">Pin 13</p>
+                    <p class="text-green-400 text-xs">Built-in LED</p>
+                  </div>
+                  <div class="text-center">
+                    <wokwi-led color="red" label="12" class="led-glow red"></wokwi-led>
+                    <p class="text-white text-xs mt-2">Pin 12</p>
+                    <p class="text-red-400 text-xs">External LED</p>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Control Panel -->
+              <div class="bg-gray-900 bg-opacity-50 rounded-lg p-4">
+                <h4 class="text-white text-sm font-medium mb-3">Simulation Control</h4>
+                <div class="space-y-3">
+                  <button id="run-button" class="neo-button w-full py-3 px-4 rounded-lg text-gray-700 font-medium flex items-center justify-center space-x-2">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <span>Run Simulation</span>
+                  </button>
+                  <button id="stop-button" disabled class="neo-button w-full py-3 px-4 rounded-lg text-gray-700 font-medium flex items-center justify-center space-x-2">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M6 6h12v12H6z"/>
+                    </svg>
+                    <span>Stop Simulation</span>
+                  </button>
+                  <button id="revert-button" class="neo-button w-full py-2 px-4 rounded-lg text-gray-700 font-medium text-sm">
+                    Reset to LED Example
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Status Panel -->
+              <div class="bg-gray-900 bg-opacity-50 rounded-lg p-4">
+                <h4 class="text-white text-sm font-medium mb-2">Status</h4>
+                <div id="status-label" class="text-green-400 text-sm font-mono">
+                  System Ready
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Code Editor & Output -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Code Editor -->
+          <div class="glass-effect rounded-xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-white text-lg font-semibold flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                </svg>
+                Arduino IDE
+              </h3>
+              <div class="flex items-center space-x-2 text-xs text-white text-opacity-60">
+                <span>C++</span>
+                <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+                <span>AVR</span>
+              </div>
+            </div>
+            <div class="code-editor bg-gray-900 bg-opacity-50 rounded-lg border border-gray-600"></div>
+          </div>
+          
+          <!-- Compiler & Serial Output -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Compiler Output -->
+            <div class="glass-effect rounded-xl p-6">
+              <h3 class="text-white text-sm font-semibold mb-3 flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20 8l-8 5-8-5V6l8 5 8-5v2zm0-4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
+                </svg>
+                Compiler Output
+              </h3>
+              <div class="bg-gray-900 bg-opacity-50 rounded-lg p-3 h-32 overflow-y-auto">
+                <pre id="compiler-output-text" class="text-xs text-green-400 font-mono whitespace-pre-wrap"></pre>
+              </div>
+            </div>
+            
+            <!-- Serial Monitor -->
+            <div class="glass-effect rounded-xl p-6">
+              <h3 class="text-white text-sm font-semibold mb-3 flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M2 17h20v2H2zm1.15-4.05L4 11l1.15-1.95L6.3 10.5l-1.15 1.95 1.15 1.95L5.15 16l-2-3.05zM9 12.5h6v1H9v-1zm7.85 1.95L18 13l-1.15-1.95L15.7 12.5l1.15 1.95-1.15 1.95L16.85 18l2-3.05z"/>
+                </svg>
+                Serial Monitor
+              </h3>
+              <div class="bg-gray-900 bg-opacity-50 rounded-lg p-3 h-32 overflow-y-auto">
+                <pre id="serial-output-text" class="text-xs text-cyan-400 font-mono whitespace-pre-wrap"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-white text-center py-4 px-4 border-t border-white border-opacity-20 mt-8">
+      <p class="text-sm text-white text-opacity-60">
+        ArduMeka Simulator - Powered by AVR8js | 
+        <span class="text-white text-opacity-80">Build • Test • Learn</span>
+      </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/loader.js"></script>
+    
+    <script>
+      // Enhanced button interactions
+      document.addEventListener('DOMContentLoaded', function() {
+        const runButton = document.getElementById('run-button');
+        const stopButton = document.getElementById('stop-button');
+        const statusLabel = document.getElementById('status-label');
+        
+        runButton.addEventListener('click', function() {
+          statusLabel.textContent = 'Simulation Running...';
+          statusLabel.className = 'text-yellow-400 text-sm font-mono';
+        });
+        
+        stopButton.addEventListener('click', function() {
+          statusLabel.textContent = 'Simulation Stopped';
+          statusLabel.className = 'text-red-400 text-sm font-mono';
+        });
+      });
+    </script>
+  </body>
+</html>
